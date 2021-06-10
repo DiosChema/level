@@ -1,4 +1,5 @@
 
+import React, { Component } from 'react';    
 
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
@@ -15,60 +16,89 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
+import { withRouter } from 'next/router'
+
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
   },
 });
 
-export default function Sales(props)
+class Sales extends Component 
 {
+  constructor(props) {
+    super(props);
 
-  const router = useRouter()
+    this.state = {}
+    this.state.sales = props.sales
+    
+    this.newSale = this.newSale.bind(this);
+  };
 
-  const newSale = (e) =>  {
-    router.push('/sales/newSale')
+  newSale()
+  {
+    this.props.router.push({
+      pathname: '/sales/newSale',
+      query: { user: this.props.router.query.user },
+    })
   }
 
-  return (
-    <Container maxWidth="sm">
+  /*componentDidMount()
+  {
+    if(!this.props.router.query.user)
+    {
+      this.props.router.replace('/users')
+    }
+  }*/
 
-      <Box m={0.5} pt={3} class="container" width="100%">
-        <h1>Ventas</h1>
-      </Box>
+  render() {
+    /*if(!this.props.router.query.user)
+    {
+      return (
+        <h1></h1>
+      )
+    }*/
+    return ( 
+      <Container maxWidth="sm">
 
-      <TableContainer component={Paper}>
-        <Table id="table" aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="right">id</TableCell>
-              <TableCell align="right">total</TableCell>
-              <TableCell align="right">items</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {props.sales.map((item) => (
-              <TableRow key={item.name}>
-                <TableCell align="right" component="th" scope="row">{item.id}</TableCell>
-                <TableCell align="right">{item.total}</TableCell>
-                <TableCell align="right">{item.totalItems}</TableCell>
+        <Box m={0.5} pt={3} class="container" width="100%">
+          <h1>Ventas</h1>
+          <h5>{this.props.router.query.user}</h5>
+        </Box>
+
+        <TableContainer component={Paper}>
+          <Table id="table" aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell align="right">id</TableCell>
+                <TableCell align="right">total</TableCell>
+                <TableCell align="right">items</TableCell>
+                <TableCell align="right">Estado</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {this.state.sales.map((item) => (
+                <TableRow key={item.id}>
+                  <TableCell align="right" component="th" scope="row">{item.id}</TableCell>
+                  <TableCell align="right">{item.total}</TableCell>
+                  <TableCell align="right">{item.totalItems}</TableCell>
+                  <TableCell align="right">{item.pagado ? 'Pagado' : 'Por cobrar: ' + (item.total - item.pago).toFixed(2)}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
 
-      <Box pt={2}>
-        <Button onClick={newSale} variant="contained" color="primary">
-          Nueva Venta
-        </Button>
-      </Box>
+        <Box pt={2}>
+          <Button onClick={this.newSale} variant="contained" color="primary">
+            Nueva Venta
+          </Button>
+        </Box>
 
-    </Container>    
+      </Container> 
+    );
+  }
 
-  )
-  
-  
 }
 
 export async function getStaticProps() {
@@ -89,3 +119,5 @@ export async function getStaticProps() {
     },
   }
 }
+  
+export default withRouter(Sales)

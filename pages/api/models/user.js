@@ -8,7 +8,7 @@ async function consultarUsuario(dbo, usuario){
   
   let dato = await dbo.collection("Users").findOne(query);
 
-  return await dato.ops[0];
+  return await dato;
 }
 
 module.exports = 

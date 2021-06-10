@@ -11,6 +11,7 @@ const axios = require('axios').default;
 import Image from 'next/image'
 import Input from '@material-ui/core/Input';
 import {useState} from 'react'
+import NumberFormat from 'react-number-format';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -20,6 +21,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+
+import { withRouter } from 'next/router'
 
 const useStyles = makeStyles({
   table: {
@@ -52,6 +55,14 @@ class Sales extends Component {
     this.postSale = this.postSale.bind(this);
   };
 
+  /*componentDidMount()
+  {
+    if(!this.props.router.query.user)
+    {
+      this.props.router.replace('/users')
+    }
+  }*/
+
   async updateState(e) 
   {
     await this.setState({[e.target.name]: e.target.value});
@@ -83,8 +94,6 @@ class Sales extends Component {
     let query = {}
     query.items = []
 
-    console.info(this)
-
     await this.state.inventory.forEach
     (element =>
       {
@@ -107,14 +116,17 @@ class Sales extends Component {
       items: query.items,
       pago: query.pago
     }).then(response => {
-      /*if(response.data.usuario)
-      {
-        router.push('/sales')
-      }*/
+      this.props.router.reload()
     });
   }
 
-  render() {    
+  render() {  
+    /*if(!this.props.router.query.user)
+    {
+      return (
+        <h1></h1>
+      )
+    }*/
     return ( 
       <Container maxWidth="sm">
 
@@ -169,17 +181,17 @@ class Sales extends Component {
             </Table>
           </TableContainer>
 
-          <Input 
+          <h4>Enganche</h4>
+          <NumberFormat
             name="pago"
-            type="number"
-            pattern="[0-9]*"
-            min="0"
-            maxlength="8"
-            placeholder="Pago"
-            required=""
+            thousandSeparator={true}
+            prefix={'$'}
             value={this.state.pago}
-            onChange={this.updateState}>
-          </Input>
+            onChange={this.updateState}
+            placeholder="$"
+            isAllowed={({ floatValue }) => floatValue <= 999999}
+          />
+
         </Box>
 
         <Typography name="totalPago" align="right" pt={2} paragraph variant="h5">{this.state.totalPago}</Typography>
@@ -214,4 +226,4 @@ export async function getStaticProps() {
   }
 }
 
-export default Sales;
+export default withRouter(Sales)
