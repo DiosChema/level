@@ -4,6 +4,8 @@ async function newSale(dbo, query, inventory){
   let total = 0.0
   let totalItems = 0
 
+  let pagado = false
+
   for(let i = 0; i < query.items.length; i++)
   {
     for(let y = 0; y < inventory.length; y++)
@@ -23,12 +25,19 @@ async function newSale(dbo, query, inventory){
     }
   }
 
+  if(query.pago >= total)
+  {
+    pagado = true
+  }
+
   let sale = 
   {
     id: query.idVenta,
     total: parseFloat(parseFloat(total).toFixed(2)),
     items: items,
-    totalItems: totalItems
+    totalItems: totalItems,
+    pago: query.pago,
+    pagado: pagado
   }
 
   let dato = await dbo.collection("Sales").insertOne(sale);
