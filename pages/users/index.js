@@ -130,7 +130,7 @@ export default function User()
 
       </Container>
 
-    <Modal
+      <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="simple-modal-title"

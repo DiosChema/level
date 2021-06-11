@@ -36,7 +36,7 @@ async function newSale(dbo, query, inventory){
     total: parseFloat(parseFloat(total).toFixed(2)),
     items: items,
     totalItems: totalItems,
-    pago: query.pago,
+    pago: parseFloat(query.pago),
     pagado: pagado
   }
 
