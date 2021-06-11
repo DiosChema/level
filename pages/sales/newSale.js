@@ -131,7 +131,7 @@ class Sales extends Component {
       <Container maxWidth="sm">
 
         <Box m={0.5} pt={3} class="container" width="100%">
-          <h1>Nueva Venta</h1>
+          <Typography name="newSale" paragraph variant="h3" align="center">Nueva Venta</Typography>
 
           <TableContainer component={Paper}>
             <Table id="table" aria-label="simple table">
@@ -142,7 +142,7 @@ class Sales extends Component {
                   <TableCell align="right">Nombre</TableCell>
                   <TableCell align="right">Existencia</TableCell>
                   <TableCell align="right">Precio</TableCell>
-                  <TableCell align="right">Articulos a comprar</TableCell>
+                  <TableCell align="right" >Articulos a comprar</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -162,17 +162,15 @@ class Sales extends Component {
                     <TableCell align="right">${item.prices}</TableCell>
                     <TableCell align="right">
                       <div>
-                        <Input 
+                        <NumberFormat
                           name={item.id}
-                          type="number"
-                          pattern="[0-9]*"
-                          min="0"
-                          maxlength="5"
-                          placeholder="Cantidad"
-                          required=""
+                          prefix={''}
+                          style={{ width: 100 }}
                           value={this.state[item.id]}
-                          onChange={this.updateState}>
-                        </Input>
+                          onChange={this.updateState}
+                          placeholder="Cant"
+                          isAllowed={({ floatValue }) => floatValue <= 999}
+                        />
                       </div>
                     </TableCell>
                   </TableRow>
@@ -181,20 +179,29 @@ class Sales extends Component {
             </Table>
           </TableContainer>
 
-          <h4>Enganche</h4>
-          <NumberFormat
-            name="pago"
-            thousandSeparator={true}
-            prefix={'$'}
-            value={this.state.pago}
-            onChange={this.updateState}
-            placeholder="$"
-            isAllowed={({ floatValue }) => floatValue <= 999999}
-          />
+          <Typography name="engah" paragraph variant="h6">Enganche</Typography>
 
         </Box>
 
-        <Typography name="totalPago" align="right" pt={2} paragraph variant="h5">{this.state.totalPago}</Typography>
+        <Box component="div" display="flex">
+          <Box>
+            <NumberFormat
+              name="pago"
+              thousandSeparator={true}
+              prefix={'$'}
+              value={this.state.pago}
+              onChange={this.updateState}
+              placeholder="$"
+              isAllowed={({ floatValue }) => floatValue <= 999999}/>
+          </Box>
+          
+          <Box ml="auto">
+            <Typography  name="totalPago" align="right" pt={2} paragraph variant="h5">{this.state.totalPago}</Typography>
+          </Box>
+          
+        </Box>
+
+        
 
         <Box pt={2}>
           <Button onClick={this.postSale} variant="contained" color="primary">

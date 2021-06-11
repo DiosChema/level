@@ -6,6 +6,7 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import { useRouter } from 'next/router'
 const axios = require('axios').default;
+import { Typography } from "@material-ui/core";
 
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -61,9 +62,17 @@ class Sales extends Component
     return ( 
       <Container maxWidth="sm">
 
-        <Box m={0.5} pt={3} class="container" width="100%">
-          <h1>Ventas</h1>
-          <h5>{this.props.router.query.user}</h5>
+        <Box m={0.5} pt={3} component="div" display="flex">
+          <Box>
+            <Typography paragraph variant="h3">Ventas</Typography>
+          </Box>
+          
+          <Box ml="auto">
+            <Button onClick={this.newSale} variant="contained" color="primary">
+              Nueva Venta
+            </Button>
+          </Box>
+          
         </Box>
 
         <TableContainer component={Paper}>
@@ -88,12 +97,6 @@ class Sales extends Component
             </TableBody>
           </Table>
         </TableContainer>
-
-        <Box pt={2}>
-          <Button onClick={this.newSale} variant="contained" color="primary">
-            Nueva Venta
-          </Button>
-        </Box>
 
       </Container> 
     );
