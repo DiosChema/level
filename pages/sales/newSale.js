@@ -114,7 +114,7 @@ class Sales extends Component {
 
     axios.post('http://localhost:3000/api/sale/newSale', {
       items: query.items,
-      pago: query.pago
+      pago: query.pago.substring(1, query.pago.length)
     }).then(response => {
       this.props.router.reload()
     });
